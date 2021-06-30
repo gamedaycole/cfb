@@ -9,16 +9,24 @@
 
 scrapeSagarin <- function(){
   
-  theurl <- "http://www.usatoday.com/sports/ncaaf/sagarin/"
+  #theurl <- "http://www.usatoday.com/sports/ncaaf/sagarin/"
+  #Updated URL for 2021-22 Season
+  theurl <- paste0("http://sagarin.com/sports/cfsend.htm")
   
-  doc = htmlParse(theurl)
+  #Adding getURL from RCurl package to retrieve source
+  doc.tmp = getURL(theurl)
+  #doc = htmlParse(theurl)
+  #New htmlParse object doc.tmp from retrieved source
+  doc = htmlParse(doc.tmp)
   
   bs <- getNodeSet(doc, "//b")
   
   Bs <- sapply(bs, FUN = xmlValue)
   timePeriodRated = Bs[grepl('COLLEGE FOOTBALL', Bs)][1]
   
-  tableNodes1 <- getNodeSet(doc, '//*[(@id = "sagarin")]//font//font')
+  #tableNodes1 <- getNodeSet(doc, '//*[(@id = "sagarin")]//font//font')
+  #Updated current nodeset June 10 2021
+  tableNodes1 <- getNodeSet(doc, '/html/body/pre[3]/font/font')
   
   temp <- sapply(X = tableNodes1, FUN = xmlValue)
   
@@ -86,12 +94,12 @@ scrapeSagarin <- function(){
     ,"recent_rank"
     )
   
-  list(
-    request_ts = Sys.time()
-    ,timePeriodRated = timePeriodRated
-    ,Rankings = Numerics(Sag)  
-  )
-  
+  #list(
+  #  request_ts = Sys.time()
+  #  ,timePeriodRated = timePeriodRated
+  #  ,Rankings = Numerics(Sag)  
+  #)
+  View(Sag)
 }
 
 
